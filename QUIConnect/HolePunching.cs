@@ -14,6 +14,10 @@ namespace QUIConnect
         private static SHA256 hasher = SHA256.Create();
         public static IPAddress[] GetIPInfoFromIPOrHostname(string iporhostname)
         {
+            if(iporhostname == null)
+            {
+                return null;
+            }
             if(IPAddress.TryParse(iporhostname,out IPAddress parsedip))
             {
                 return new IPAddress[] { parsedip };

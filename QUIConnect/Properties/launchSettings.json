@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "QUIConnect": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}

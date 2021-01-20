@@ -13,12 +13,26 @@ namespace QUIConnect
     {
         static void Main(string[] args)
         {
-            
+            bool RunningInContainer = Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER").ToLower() == "true";
             IPAddress other = null;
             while (other == null)
             {
-                Console.WriteLine("Enter hostname or IPAddress for other party.");
-                other = HolePunching.GetIPInfoFromIPOrHostname(Console.ReadLine())?.FirstOrDefault();
+                string REMOTE = Environment.GetEnvironmentVariable("REMOTE");
+                other = HolePunching.GetIPInfoFromIPOrHostname(REMOTE)?.FirstOrDefault();
+                if (other == null)
+                {
+                    if (!RunningInContainer)
+                    {
+                        Console.WriteLine("Enter hostname or IPAddress for other party.");
+                        other = HolePunching.GetIPInfoFromIPOrHostname(Console.ReadLine())?.FirstOrDefault();
+                    }
+                    else
+                    {
+                        Console.WriteLine("A remote host must be specified via the \"REMOTE\" environment variable.");
+                        Console.WriteLine("Please provide an IP address or a hostname.");
+                        return;
+                    }
+                }
             }
             Console.WriteLine("Punching a hole to " + other.ToString() + ". This may take some time. Make sure the other party is punching from their side too.");
             Stopwatch sw = new Stopwatch();
